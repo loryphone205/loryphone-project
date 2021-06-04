@@ -8,6 +8,7 @@ int main()
     char Mat[MIN_LVL][MAX_LVL];
     int I,J;
     Player P1;
+    Enemy E;
     bool cond=true;
     while(cond==true)
     {

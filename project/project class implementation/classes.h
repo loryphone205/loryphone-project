@@ -9,14 +9,14 @@ class Enemy
         int E_i, E_j;
     public:
         Enemy(char E=' ', int E_i=0, int E_j=0);
-        void setEi(int E_io){E_i=E_io;}
-        void setEj(int E_jo){E_j=E_jo;}
-        void setE(char (&Mat)[MIN_LVL][MAX_LVL], Enemy E1);
+        void setEi();
+        void setEj();
+        void setE(char (&Mat)[MIN_LVL][MAX_LVL], Enemy E);
         int getEi(){return E_i;}
         int getEj(){return E_j;}
         char getE(){return E;}
-        void MoveE(char (&Mat)[MIN_LVL][MAX_LVL], Enemy &E1);
-        void RevertLastMoveE(char (&Mat)[MIN_LVL][MAX_LVL], Enemy &E1, char &last);
+        void MoveE(char (&Mat)[MIN_LVL][MAX_LVL], Enemy &E);
+        void RevertLastMoveE(char (&Mat)[MIN_LVL][MAX_LVL], Enemy &E, char &last);
 };
 
 class Player
@@ -80,6 +80,12 @@ void Player::MoveP(char (&Mat)[MIN_LVL][MAX_LVL], Player &P, char &c)
             P.setPj(P.getPj()+1);
             Mat[P.getPi()][P.getPj()]=tmp;
         }
+        if((P.getPi()==0 || P.getPi()==MIN_LVL-1)||(P.getPj()==0||P.getPj()==MAX_LVL-1))
+        {
+            cout<<"Please do not reach the end of the map!"<<endl;
+            P.RevertLastMoveP(Mat, P, c);
+            return;
+        }
     }
 }
 
@@ -114,6 +120,30 @@ void Player::RevertLastMoveP(char (&Mat)[MIN_LVL][MAX_LVL], Player &P, char &las
         P.setPj(P.getPj()-1);
         Mat[P.getPi()][P.getPj()]=tmp;
     }
+}
+
+Enemy::Enemy(char E1, int I, int J)
+{
+    E=E1;
+    E_i=I;
+    E_j=J;
+}
+
+void Enemy::setE(char (&Mat)[MIN_LVL][MAX_LVL], Enemy E)
+{
+    Mat[E.getEi()][E.getEj()]='E';
+}
+
+void Enemy::setEi()
+{
+    uniform_int_distribution<> distr(1,18);
+    E_i=distr(gen);
+}
+
+void Enemy::setEj()
+{
+     uniform_int_distribution<> distr(1,78);
+     E_j=distr(gen);
 }
 
 #endif

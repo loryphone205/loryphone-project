@@ -83,19 +83,10 @@ void Gameplay(char (&Mat)[MIN_LVL][MAX_LVL], Player &P)
     cout<<"Use W to move up, S to move down, D to move right, A to move left"<<endl;
     P.setP(Mat, P);
     char c;
-    char last;
     while(1)
     {
-        if((P.getPi()==0 || P.getPi()==MIN_LVL-1)||(P.getPj()==0||P.getPj()==MAX_LVL-1))
-        {
-            cout<<"Please do not reach the end of the map!"<<endl;
-            P.RevertLastMoveP(Mat, P, last);
-            PrintMat(Mat);
-        }
-        else
         {
             c=getch();
-            last=c;
             P.MoveP(Mat, P, c);
             if(c=='b')
                 break;

@@ -2,6 +2,9 @@
 #define MIN_LVL 20
 #include <termios.h>
 #include <stdio.h>
+#include <random>
 #include <iostream>
-#include <time.h>
 using namespace std;
+
+random_device rd;
+mt19937 gen(rd());
