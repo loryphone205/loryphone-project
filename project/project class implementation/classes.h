@@ -9,14 +9,14 @@ class Enemy
         int E_i, E_j;
     public:
         Enemy(char E=' ', int E_i=0, int E_j=0);
-        void setEi();
-        void setEj();
+        void setEi(int);
+        void setEj(int);
         void setE(char (&Mat)[MIN_LVL][MAX_LVL], Enemy E);
         int getEi(){return E_i;}
         int getEj(){return E_j;}
         char getE(){return E;}
-        void MoveE(char (&Mat)[MIN_LVL][MAX_LVL], Enemy &E);
-        void RevertLastMoveE(char (&Mat)[MIN_LVL][MAX_LVL], Enemy &E, char &last);
+        void MoveE(char (&Mat)[MIN_LVL][MAX_LVL], Enemy &);
+        void RevertLastMoveE(char (&Mat)[MIN_LVL][MAX_LVL], Enemy &E, int &n);
 };
 
 class Player
@@ -134,16 +134,89 @@ void Enemy::setE(char (&Mat)[MIN_LVL][MAX_LVL], Enemy E)
     Mat[E.getEi()][E.getEj()]='E';
 }
 
-void Enemy::setEi()
+void Enemy::setEi(int E_io)
 {
-    uniform_int_distribution<> distr(1,18);
-    E_i=distr(gen);
+    E_i=E_io;
 }
 
-void Enemy::setEj()
+void Enemy::setEj(int E_jo)
 {
-     uniform_int_distribution<> distr(1,78);
-     E_j=distr(gen);
+     E_j=E_jo;
+}
+
+void Enemy::RevertLastMoveE(char (&Mat)[MIN_LVL][MAX_LVL], Enemy &E, int &n)
+{
+    char tmp;
+    if(n==1)
+    {
+        tmp=Mat[E.getEi()][E.getEj()];
+        Mat[E.getEi()][E.getEj()]='X';
+        E.setEi(E.getEi()+1);
+        Mat[E.getEi()][E.getEj()]=tmp;
+    }
+    else if(n==2)
+    {
+        tmp=Mat[E.getEi()][E.getEj()];
+        Mat[E.getEi()][E.getEj()]='X';
+        E.setEj(E.getEj()+1);
+        Mat[E.getEi()][E.getEj()]=tmp;
+    }
+    else if(n==3)
+    {
+        tmp=Mat[E.getEi()][E.getEj()];
+        Mat[E.getEi()][E.getEj()]='X';
+        E.setEi(E.getEi()-1);
+        Mat[E.getEi()][E.getEj()]=tmp;
+    }
+    else if(n==4)
+    {
+        tmp=Mat[E.getEi()][E.getEj()];
+        Mat[E.getEi()][E.getEj()]='X';
+        E.setEj(E.getEj()-1);
+        Mat[E.getEi()][E.getEj()]=tmp;
+    }
+}
+
+void Enemy::MoveE(char (&Mat)[MIN_LVL][MAX_LVL], Enemy &E)
+{
+    uniform_real_distribution<> distr(1,5);
+    char tmp;
+    int n=0;
+    n=distr(gen);
+    if(n==1)
+    {
+        tmp=Mat[E.getEi()][E.getEj()];
+        Mat[E.getEi()][E.getEj()]=' ';
+        E.setEi(E.getEi()-1);
+        Mat[E.getEi()][E.getEj()]=tmp;
+    }
+    else if(n==2)
+    {
+        tmp=Mat[E.getEi()][E.getEj()];
+        Mat[E.getEi()][E.getEj()]=' ';
+        E.setEj(E.getEj()-1);
+        Mat[E.getEi()][E.getEj()]=tmp;
+    }
+    else if(n==3)
+    {
+        tmp=Mat[E.getEi()][E.getEj()];
+        Mat[E.getEi()][E.getEj()]=' ';
+        E.setEi(E.getEi()+1);
+        Mat[E.getEi()][E.getEj()]=tmp;
+    }
+    else if(n==4)
+    {
+        tmp=Mat[E.getEi()][E.getEj()];
+        Mat[E.getEi()][E.getEj()]=' ';
+        E.setEj(E.getEj()+1);
+        Mat[E.getEi()][E.getEj()]=tmp;
+    }
+    if((E.getEi()==0 || E.getEi()==MIN_LVL-1)||(E.getEj()==0||E.getEj()==MAX_LVL-1))
+    {
+        E.RevertLastMoveE(Mat, E, n);
+        return;
+    }
+
 }
 
 #endif
