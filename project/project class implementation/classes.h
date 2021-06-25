@@ -15,8 +15,8 @@ class Enemy
         int getEi(){return E_i;}
         int getEj(){return E_j;}
         char getE(){return E;}
-        void MoveE(char (&Mat)[MIN_LVL][MAX_LVL], Enemy &);
-        void RevertLastMoveE(char (&Mat)[MIN_LVL][MAX_LVL], Enemy &E, int &n);
+        void MoveE(char (&Mat)[MIN_LVL][MAX_LVL], Enemy &, int &);
+        void RevertLastMoveE(char (&Mat)[MIN_LVL][MAX_LVL], Enemy &, int &);
 };
 
 class Player
@@ -177,12 +177,10 @@ void Enemy::RevertLastMoveE(char (&Mat)[MIN_LVL][MAX_LVL], Enemy &E, int &n)
     }
 }
 
-void Enemy::MoveE(char (&Mat)[MIN_LVL][MAX_LVL], Enemy &E)
+void Enemy::MoveE(char (&Mat)[MIN_LVL][MAX_LVL], Enemy &E, int &n)
 {
     uniform_real_distribution<> distr(1,5);
     char tmp;
-    int n=0;
-    n=distr(gen);
     if(n==1)
     {
         tmp=Mat[E.getEi()][E.getEj()];
@@ -216,7 +214,6 @@ void Enemy::MoveE(char (&Mat)[MIN_LVL][MAX_LVL], Enemy &E)
         E.RevertLastMoveE(Mat, E, n);
         return;
     }
-
 }
 
 #endif

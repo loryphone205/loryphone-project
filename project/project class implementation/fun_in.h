@@ -111,6 +111,24 @@ Enemy *Resize(char (&Mat)[MIN_LVL][MAX_LVL], int &n, int &i, Enemy *e)
     return p;
 }
 
+Enemy *Reallocate(char (&Mat)[MIN_LVL][MAX_LVL], int &n, Enemy *e)
+{
+    int j=0;
+    int k=0;
+    Enemy *p;
+    p = new Enemy [n];
+    do
+    {
+        p[k].setEi(e[j].getEi());
+        p[k].setEj(e[j].getEj());
+        p[k].setE(Mat, e[j]);
+        j++;
+        k++;
+    }while(j<n);
+    delete []e;
+    return p;
+}
+
 Enemy *CheckKill(char (&Mat)[MIN_LVL][MAX_LVL], Enemy *e, Player &P, int &c, int &n)
 {
     for(int i=0; i<n; i++)
@@ -129,7 +147,12 @@ void Gameplay(char (&Mat)[MIN_LVL][MAX_LVL], Player &P, Enemy *e, int n)
 {
     int NKillsToDo=n;
     int cont=0;
+    int s_i=Random(1, MIN_LVL-2);
+    int s_j=Random(1, MAX_LVL-2);
+    Mat[s_i][s_j]='S';
     cout<<"Use W to move up, S to move down, D to move right, A to move left"<<endl;
+    cout<<"Press 'b' to stop the game, 'r' to show bugged enemies"<<endl;
+    cout<<"Reach the Stairs 'S' on the map to end the game"<<endl;
     P.setP(Mat, P);
     for(int i=0; i<n; i++)
     {
@@ -140,22 +163,46 @@ void Gameplay(char (&Mat)[MIN_LVL][MAX_LVL], Player &P, Enemy *e, int n)
     {
         c=getch();
         P.MoveP(Mat, P, c);
-        e=CheckKill(Mat, e, P, cont, n);
-        cout<<"flag 1"<<endl;
-        for(int i=0; i<n; i++)
+        if(P.getPi()==s_i && P.getPj()==s_j)
         {
-            e[i].MoveE(Mat, e[i]);
-            if ((P.getPi()==e[i].getEi())&&(P.getPj()==e[i].getEj()))
+            if(cont==NKillsToDo)
+            {
+                cout<<"You Win!"<<endl;
+                break;
+            }
+            else
+            {
+                cout<<"Please kill all the enemies to win!"<<endl;
+                P.RevertLastMoveP(Mat, P, c);
+                Mat[s_i][s_j]='S';
+            }
+        }
+        e=CheckKill(Mat, e, P, cont, n);
+        for(int i=0; i<n; i++)
+        {   
+            uniform_real_distribution<> distr(1,5);
+            int ne=0;
+            ne=distr(gen);
+            e[i].MoveE(Mat, e[i], ne);
+            if(e[i].getEi()==s_i && e[i].getEj()==s_j)
+            {
+                e[i].RevertLastMoveE(Mat, e[i], ne);
+                Mat[s_i][s_j]='S';
+            }
+            if((P.getPi()==e[i].getEi())&&(P.getPj()==e[i].getEj()))
                 Mat[P.getPi()][P.getPj()]='P';
         }
-        cout<<"flag 2"<<endl;
         e=CheckKill(Mat, e, P, cont, n);
-        if(c=='b'||cont==NKillsToDo)
+        if(c=='r')
+        {
+            cout<<"Showing bugged enemies"<<endl;
+            e=Reallocate(Mat, n, e);
+        }
+        if(c=='b')
         {
             cout<<"You Win!"<<endl;
             break;
         }
         PrintMat(Mat);
-        
     }
 }
