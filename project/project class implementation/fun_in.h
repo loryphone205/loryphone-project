@@ -151,7 +151,7 @@ void Gameplay(char (&Mat)[MIN_LVL][MAX_LVL], Player &P, Enemy *e, int n)
     int s_j=Random(1, MAX_LVL-2);
     Mat[s_i][s_j]='S';
     cout<<"Use W to move up, S to move down, D to move right, A to move left"<<endl;
-    cout<<"Press 'b' to stop the game, 'r' to show bugged enemies"<<endl;
+    cout<<"Press 'b' to stop the game"<<endl;
     cout<<"Reach the Stairs 'S' on the map to end the game"<<endl;
     P.setP(Mat, P);
     for(int i=0; i<n; i++)
@@ -193,11 +193,7 @@ void Gameplay(char (&Mat)[MIN_LVL][MAX_LVL], Player &P, Enemy *e, int n)
                 Mat[P.getPi()][P.getPj()]='P';
         }
         e=CheckKill(Mat, e, P, cont, n);
-        if(c=='r')
-        {
-            cout<<"Showing bugged enemies"<<endl;
-            e=Reallocate(Mat, n, e);
-        }
+        e=Reallocate(Mat, n, e);
         if(c=='b')
         {
             cout<<"You Win!"<<endl;
