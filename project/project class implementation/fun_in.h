@@ -150,9 +150,6 @@ void Gameplay(char (&Mat)[MIN_LVL][MAX_LVL], Player &P, Enemy *e, int n)
     int s_i=Random(1, MIN_LVL-2);
     int s_j=Random(1, MAX_LVL-2);
     Mat[s_i][s_j]='S';
-    cout<<"Use W to move up, S to move down, D to move right, A to move left"<<endl;
-    cout<<"Press 'b' to stop the game"<<endl;
-    cout<<"Reach the Stairs 'S' on the map to end the game"<<endl;
     P.setP(Mat, P);
     for(int i=0; i<n; i++)
     {
@@ -167,12 +164,12 @@ void Gameplay(char (&Mat)[MIN_LVL][MAX_LVL], Player &P, Enemy *e, int n)
         {
             if(cont==NKillsToDo)
             {
-                cout<<"You Win!"<<endl;
+                cout<<"You advanced a level";
                 break;
             }
             else
             {
-                cout<<"Please kill all the enemies to win!"<<endl;
+                cout<<"Please kill all the enemies to go up!"<<endl;
                 P.RevertLastMoveP(Mat, P, c);
                 Mat[s_i][s_j]='S';
             }
@@ -201,4 +198,5 @@ void Gameplay(char (&Mat)[MIN_LVL][MAX_LVL], Player &P, Enemy *e, int n)
         }
         PrintMat(Mat);
     }
+    delete []e;
 }
